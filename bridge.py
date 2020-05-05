@@ -85,6 +85,26 @@ def createPratt(length, height, n):
     loads = [(math.ceil((3/2)*n), 18.2)]
     supports = [(0), (n)]
     return Bridge(x, y, connections, loads, supports)
+def createKTruss(length, height, n):
+    dx = length/n
+    x = [i*dx for i in range(n+1)] + [i*dx for i in range(1, n)] + [i*dx for i in range(1,n)]
+    y = [0 for i in range(n+1)] + [height/2 for i in range(1,n)] + [height for i in range(1,n)]
+    connections = []
+    for i in range(1,n):
+        connections.append([i, i+2*n-1])
+    connections.append([0,2*n])
+    connections.append([n, 3*n-2])
+    connections.extend([[i, i+1] for i in range(n)])
+    connections.extend([[i, i+1] for i in range(2*n, 3*n-2)])
+    for i in range(n+1, n+math.ceil(n/2)):
+        connections.append([i, i+n])
+        connections.append([i, i-n+1])
+    for i in range(n+math.floor(n/2)+1, 2*n):
+        connections.append([i, i+n-2])
+        connections.append([i, i-n-1])
+    supports = [(0), (n)]
+    loads = [(math.floor((5/2)*n-1), 18.2)]
+    return Bridge(x, y, connections, loads, supports)
 
 b = Bridge([0,10,20,30,40,50,10,20,30,40], [0,0,0,0,0,0,15,15,15,15], [(0,6), (6,7), (7,8), (8,9), (9, 5), (4,5), (3,4), (2,3), (1,2), (0,1), (1,6), (2,7), (3,8), (4, 9), (1,7), (2,8), (3,7), (4,8)], [(2,9), (3,9)], [(0),(5)], unit='cm')
 b.show()
